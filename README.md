@@ -2,7 +2,11 @@
 
 ## Getting started
 
-`$ npm install react-native-raster-svg --save`
+`
+pod 'Kingfisher', '~>6.3.1'
+pod 'SVGKit', :modular_headers => true
+pod 'CocoaLumberjack'
+`
 
 ### Mostly automatic installation
 
@@ -11,8 +15,10 @@
 ## Usage
 
 ```javascript
-import ReactNativeRasterSvg from 'src/index';
+import { RasterSvgView } from 'react-native-raster-svg';
 
-// TODO: What to do with the module?
-ReactNativeRasterSvg;
+<RasterSvgView
+  style={{ width: 200, height: 100 }}
+  params={{ source: require('./assets/dd.svg') }}
+/>
 ```
