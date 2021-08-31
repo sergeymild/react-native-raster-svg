@@ -22,11 +22,30 @@ private struct SVGImgProcessor: ImageProcessor {
         case .image(let image):
             return image
         case .data(let data):
-//            let image = try! SVGParser.parse(text: String(data: data, encoding: .utf8)!).toNativeImage(size: .init(200, 100))
             let image = SVGKImage(data: data).uiImage!
             return image
         }
     }
+}
+
+class SVGDataProvider: ImageDataProvider {
+    private let cacheKey: String
+    private let file: String
+    
+    init(file: String, cacheKey: String?) {
+        self.file = file
+        self.cacheKey = cacheKey ?? "key2"
+    }
+    
+    func data(handler: @escaping (Result<Data, Error>) -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard let data = self.file.data(using: .utf8) else { return }
+            handler(.success(data))
+        }
+    }
+    
+    
 }
 
 @objc
@@ -39,8 +58,14 @@ final class RasterSvgView: RCTView {
             let type = params["type"] as? String
             let source = params["source"] as? String
             if source == nil { return }
-            if type == "local" {
+            if type == "local" || type == "remote" {
                 image.kf.setImage(with: URL(string: source!), options: [.processor(SVGImgProcessor())])
+            } else if type == "file" {
+                let cacheKey = params["cacheKey"] as? String
+                image.kf.setImage(
+                    with: SVGDataProvider(file: source!, cacheKey: cacheKey),
+                    options: [.processor(SVGImgProcessor())]
+                )
             }
         }
     }
