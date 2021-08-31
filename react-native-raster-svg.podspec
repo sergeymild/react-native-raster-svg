@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React-Core"
-  s.dependency "SVGKit"
+  s.dependency "SVGKit", :modular_headers => true
   s.dependency "Kingfisher"
 end
 
