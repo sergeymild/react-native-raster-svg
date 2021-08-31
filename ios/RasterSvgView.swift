@@ -29,7 +29,7 @@ private struct SVGImgProcessor: ImageProcessor {
 }
 
 class SVGDataProvider: ImageDataProvider {
-    private let cacheKey: String
+    private var cacheKey: String
     private let file: String
     
     init(file: String, cacheKey: String?) {
