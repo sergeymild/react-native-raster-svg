@@ -35,7 +35,7 @@ android/*.hprof
 .gradle
 local.properties
 *.iml
-
+example/android/.idea
 # node.js
 #
 node_modules/

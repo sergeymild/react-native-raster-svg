@@ -12,4 +12,7 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "example";
   }
+
+
+
 }

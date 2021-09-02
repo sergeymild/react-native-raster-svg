@@ -10,14 +10,20 @@ import React from 'react';
 
 const ReactNativeRasterSvg = requireNativeComponent('ReactNativeRasterSvg');
 
-type Type = 'unspecified' | 'local' | 'remote' | 'file'
-interface Params { source: string | ImageRequireSource, cacheKey?: string, width: number, height: number };
+type Type = 'unspecified' | 'local' | 'remote' | 'file';
+interface Params {
+  source: string | ImageRequireSource;
+  cacheKey?: string;
+}
 interface Props extends ViewProps {
-  params: Params
+  params: Params;
 }
 
 export const RasterSvgView: React.FC<Props> = (props) => {
-  let params: Params & {type: Type} = {...props.params, type: 'unspecified'}
+  let params: Params & { type: Type } = {
+    ...props.params,
+    type: 'unspecified',
+  };
   if (typeof params.source !== 'string') {
     params.source = Image.resolveAssetSource(params.source).uri;
     params.type = 'local';
@@ -26,7 +32,6 @@ export const RasterSvgView: React.FC<Props> = (props) => {
   } else {
     params.type = 'file';
   }
-  props.params = params
-
-  return <ReactNativeRasterSvg {...props} />;
+  //@ts-ignore
+  return <ReactNativeRasterSvg {...props} rasterParams={params} />;
 };
