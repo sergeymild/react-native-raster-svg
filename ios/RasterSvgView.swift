@@ -54,13 +54,13 @@ final class RasterSvgView: RCTView {
     @objc
     var rasterParams: [String: Any] = [:] {
         didSet {
-            let type = params["type"] as? String
-            let source = params["source"] as? String
+            let type = rasterParams["type"] as? String
+            let source = rasterParams["source"] as? String
             if source == nil { return }
             if type == "local" || type == "remote" {
                 image.kf.setImage(with: URL(string: source!), options: [.processor(SVGImgProcessor())])
             } else if type == "file" {
-                let cacheKey = params["cacheKey"] as? String
+                let cacheKey = rasterParams["cacheKey"] as? String
                 image.kf.setImage(
                     with: SVGDataProvider(file: source!, cacheKey: cacheKey),
                     options: [.processor(SVGImgProcessor())]
