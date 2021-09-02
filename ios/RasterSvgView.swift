@@ -52,7 +52,7 @@ final class RasterSvgView: RCTView {
     private let image = UIImageView()
     
     @objc
-    var params: [String: Any] = [:] {
+    var rasterParams: [String: Any] = [:] {
         didSet {
             let type = params["type"] as? String
             let source = params["source"] as? String
