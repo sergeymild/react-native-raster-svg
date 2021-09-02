@@ -4,11 +4,17 @@ import android.content.Context;
 import android.graphics.Color;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.Key;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.react.raster.svg.glide.GlideSource;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 public class RasterSvgView extends ReactViewGroup {
     private final ImageView imageView;
@@ -35,9 +41,23 @@ public class RasterSvgView extends ReactViewGroup {
         }
         String cacheKey = map.getString("cacheKey");
         if (cacheKey != null) {
-            Glide.with(this).load(new GlideSource(source, cacheKey)).into(imageView);
+            Glide.with(this).load(source).signature(new S(cacheKey)).into(imageView);
             return;
         }
         Glide.with(this).load(source).into(imageView);
+    }
+
+
+    static class S implements Key {
+        private final String cacheKey;
+
+        public S(String cacheKey) {
+            this.cacheKey = cacheKey;
+        }
+
+        @Override
+        public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+            messageDigest.update(cacheKey.getBytes(StandardCharsets.UTF_8));
+        }
     }
 }
