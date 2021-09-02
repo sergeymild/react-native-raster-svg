@@ -11,7 +11,7 @@ import React from 'react';
 const ReactNativeRasterSvg = requireNativeComponent('ReactNativeRasterSvg');
 
 type Type = 'unspecified' | 'local' | 'remote' | 'file'
-interface Params { source: string | ImageRequireSource, cacheKey?: string };
+interface Params { source: string | ImageRequireSource, cacheKey?: string, width: number, height: number };
 interface Props extends ViewProps {
   params: Params
 }
@@ -26,5 +26,7 @@ export const RasterSvgView: React.FC<Props> = (props) => {
   } else {
     params.type = 'file';
   }
-  return <ReactNativeRasterSvg {...params} />;
+  props.params = params
+
+  return <ReactNativeRasterSvg {...props} />;
 };
