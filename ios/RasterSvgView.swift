@@ -29,7 +29,7 @@ private struct SVGImgProcessor: ImageProcessor {
 }
 
 class SVGDataProvider: ImageDataProvider {
-    private var cacheKey: String
+    var cacheKey: String
     private let file: String
     
     init(file: String, cacheKey: String?) {
@@ -38,8 +38,7 @@ class SVGDataProvider: ImageDataProvider {
     }
     
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+        DispatchQueue.global(qos: .background).async {
             guard let data = self.file.data(using: .utf8) else { return }
             handler(.success(data))
         }
