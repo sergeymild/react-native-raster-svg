@@ -4,6 +4,6 @@
 
 @interface RCT_EXTERN_MODULE(ReactNativeRasterSvg, RCTViewManager)
 
-RCT_EXPORT_VIEW_PROPERTY(params, NSDictionary);
+RCT_EXPORT_VIEW_PROPERTY(rasterParams, NSDictionary);
 
 @end
