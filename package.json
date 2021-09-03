@@ -1,7 +1,7 @@
 {
   "name": "react-native-raster-svg",
   "title": "React Native Raster Svg",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Rasterizer for svg",
   "main": "src/index",
   "module": "src/index",
