@@ -1,7 +1,6 @@
 package com.react.raster.svg;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -9,9 +8,7 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Key;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 import com.facebook.react.views.view.ReactViewGroup;
-import com.react.raster.svg.glide.GlideSource;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
