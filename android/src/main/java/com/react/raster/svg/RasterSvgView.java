@@ -18,6 +18,7 @@ import com.bumptech.glide.load.Key;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.signature.ObjectKey;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.views.view.ReactViewGroup;
@@ -50,7 +51,7 @@ public class RasterSvgView extends ReactViewGroup implements RequestListener<Dra
                 .addListener(this);
 
         String cacheKey = map.getString("cacheKey");
-        if (cacheKey != null) builder = builder.signature(new S(cacheKey));
+        if (cacheKey != null) builder = builder.signature(new ObjectKey(cacheKey));
         builder.preload();
     }
 
@@ -64,20 +65,6 @@ public class RasterSvgView extends ReactViewGroup implements RequestListener<Dra
         RasterSvgView.this.resource = resource;
         RasterSvgView.this.invalidate();
         return false;
-    }
-
-
-    static class S implements Key {
-        private final String cacheKey;
-
-        public S(String cacheKey) {
-            this.cacheKey = cacheKey;
-        }
-
-        @Override
-        public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
-            messageDigest.update(cacheKey.getBytes(StandardCharsets.UTF_8));
-        }
     }
 
     @Override
