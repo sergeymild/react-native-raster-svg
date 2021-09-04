@@ -12,6 +12,13 @@ import Kingfisher
 import SVGKit
 
 private struct SVGImgProcessor: ImageProcessor {
+    let width: CGFloat
+    let height: CGFloat
+    
+    init(width: CGFloat, height: CGFloat) {
+        self.width = width
+        self.height = height
+    }
     
     public var identifier: String = "com.appidentifier.webpprocessor"
     public func process(
@@ -22,7 +29,9 @@ private struct SVGImgProcessor: ImageProcessor {
         case .image(let image):
             return image
         case .data(let data):
-            let image = SVGKImage(data: data).uiImage!
+            let svg = SVGKImage(data: data)
+            svg?.size = .init(width: width, height: height)
+            let image = svg?.uiImage!
             return image
         }
     }
@@ -54,16 +63,27 @@ final class RasterSvgView: RCTView {
     @objc
     var rasterParams: [String: Any] = [:] {
         didSet {
-            let type = rasterParams["type"] as? String
-            let source = rasterParams["source"] as? String
-            if source == nil { return }
+            let type = rasterParams["type"] as! String
+            let source = rasterParams["source"] as! String
+            let width = CGFloat(rasterParams["width"] as! Int)
+            let height = CGFloat(rasterParams["width"] as! Int)
+            
+            let scale = UIScreen.main.scale
+            let resizingProcessor = ResizingImageProcessor(
+                referenceSize: CGSize(width: width * scale, height: height * scale))
+            KingfisherManager.shared.cache.clearCache()
+            var options: KingfisherOptionsInfo = []
+            options.append(.processor(SVGImgProcessor(width: width * scale, height: height * scale)))
             if type == "local" || type == "remote" {
-                image.kf.setImage(with: URL(string: source!), options: [.processor(SVGImgProcessor())])
+                image.kf.setImage(
+                    with: URL(string: source),
+                    options: options
+                )
             } else if type == "file" {
                 let cacheKey = rasterParams["cacheKey"] as? String
                 image.kf.setImage(
-                    with: SVGDataProvider(file: source!, cacheKey: cacheKey),
-                    options: [.processor(SVGImgProcessor())]
+                    with: SVGDataProvider(file: source, cacheKey: cacheKey),
+                    options: options
                 )
             }
         }

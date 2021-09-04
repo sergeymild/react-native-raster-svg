@@ -13,6 +13,8 @@ const ReactNativeRasterSvg = requireNativeComponent('ReactNativeRasterSvg');
 type Type = 'unspecified' | 'local' | 'remote' | 'file';
 interface Params {
   source: string | ImageRequireSource;
+  width: number;
+  height: number;
   cacheKey?: string;
 }
 interface Props extends ViewProps {

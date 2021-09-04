@@ -1,7 +1,8 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-use_frameworks!
+plugin 'cocoapods-user-defined-build-types'
+enable_user_defined_build_types!
 
 platform :ios, '12.0'
 
@@ -13,6 +14,10 @@ target 'example' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
+  
+  pod 'Kingfisher', '~>6.3.1', :build_type => :dynamic_framework
+  pod 'SVGKit', :modular_headers => true
+  pod 'CocoaLumberjack'
 
   pod 'react-native-raster-svg', :path => '../..'
 end

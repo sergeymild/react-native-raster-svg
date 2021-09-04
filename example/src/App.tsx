@@ -7,8 +7,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <RasterSvgView
-        style={{ width: 200, height: 100 }}
-        params={{ source: require('./assets/dd.svg') }}
+        style={{ width: 100, height: 40 }}
+        params={{ source: require('./assets/dd.svg'), width: 200, height: 40 }}
       />
     </View>
   );
