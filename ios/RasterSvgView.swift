@@ -31,8 +31,7 @@ private struct SVGImgProcessor: ImageProcessor {
         case .data(let data):
             let svg = SVGKImage(data: data)
             svg?.size = .init(width: width, height: height)
-            let image = svg?.uiImage!
-            return image
+            return svg?.uiImage
         }
     }
 }
