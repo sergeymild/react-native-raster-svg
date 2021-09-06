@@ -1,13 +1,5 @@
-//
-//  RasterSvgView.swift
-//  RasterSvg
-//
-//  Created by Sergei Golishnikov on 31/08/2021.
-//  Copyright © 2021 Facebook. All rights reserved.
-//
 
 import Foundation
-import React
 import Kingfisher
 import SVGKit
 
@@ -36,6 +28,8 @@ private class SVGImgProcessor: ImageProcessor {
     }
 }
 
+let queue = DispatchQueue(label: "svgParserQueue")
+
 class SVGDataProvider: ImageDataProvider {
     var cacheKey: String
     private let file: String
@@ -46,7 +40,7 @@ class SVGDataProvider: ImageDataProvider {
     }
     
     func data(handler: @escaping (Result<Data, Error>) -> Void) {
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        queue.async { [weak self] in
             guard let self = self else { return }
             guard let data = self.file.data(using: .utf8) else { return }
             handler(.success(data))
@@ -71,6 +65,9 @@ final class RasterSvgView: UIImageView {
 
             var options: KingfisherOptionsInfo = []
             options.append(.processor(SVGImgProcessor(width: width, height: height)))
+            options.append(.processingQueue(.dispatch(queue)))
+            options.append(.memoryCacheExpiration(.expired))
+
             if type == "local" || type == "remote" {
                 task = kf.setImage(
                     with: URL(string: source),
@@ -86,8 +83,29 @@ final class RasterSvgView: UIImageView {
         }
     }
     
+    init() {
+        super.init(frame: .zero)
+        ///addSubview(image)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        //image.frame = .init(x: 0, y: 0, width: frame.width, height: frame.height)
+    }
+    
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        debugPrint("🐶 removeFromSuperview")
+    }
+    
     deinit {
         task?.cancel()
         task = nil
+        debugPrint("🐶")
+        //image.image = nil
     }
 }
