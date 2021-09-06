@@ -26,5 +26,6 @@ Pod::Spec.new do |s|
   s.dependency "React-Core"
   s.dependency "SVGKit"
   s.dependency "Kingfisher"
+  s.dependency "SwiftDraw"
 end
 
