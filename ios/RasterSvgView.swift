@@ -22,7 +22,11 @@ private class SVGImgProcessor: ImageProcessor {
             return image
         case .data(let data):
             let svg = SVGKImage(data: data)
-            svg?.size = .init(width: width, height: height)
+            if (svg?.hasSize() == true) {
+                let s = svg?.size ?? .zero
+                let aspect = s.width > s.height ? s.width / s.height : s.height / s.width
+                svg?.size = .init(width: width, height: width * aspect)
+            }
             return svg?.uiImage
         }
     }
@@ -55,6 +59,7 @@ final class RasterSvgView: UIImageView {
     @objc
     var rasterParams: [String: Any] = [:] {
         didSet {
+            contentMode = .scaleAspectFill
             task?.cancel()
             task = nil
             let type = rasterParams["type"] as! String
